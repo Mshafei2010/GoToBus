@@ -49,5 +49,10 @@ public class UserServices {
 		 List<User> persons = query.getResultList();
 		 return persons;
 	}
+	@GET
+	@Path("/get")
+	public String get(){
+		 return "Heloo";
+	}
 
 }
