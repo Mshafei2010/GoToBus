@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
 @Stateless
 @LocalBean
 @Entity
@@ -23,10 +25,14 @@ public class Station implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int Id;
+	@NotNull
 	@Column(name="name")
 	String name;
+	@NotNull
 	@Column(name="longitude")
 	double longitude;
+	@NotNull
+	@DecimalMax("90.0")
 	@Column(name="latitude")
 	double latitude;
 	public String getName() {
@@ -57,4 +63,3 @@ public class Station implements Serializable{
 	
 
 }
-

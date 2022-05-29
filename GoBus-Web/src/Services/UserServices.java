@@ -15,69 +15,43 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.jboss.resteasy.spi.HttpResponse;
-
-import com.sun.mail.imap.protocol.Status;
-import com.sun.org.apache.bcel.internal.generic.InstructionConstants.Clinit;
-
-import EJBs.User;
+import EJBs.Station;
 
 @Stateless
-@Path("/user")
+@Path("/station")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class UserServices {
-	
+public class StationServices {
 	@PersistenceContext(unitName="GoBusWEB")
 	 private EntityManager entityManager;
-
-	
 	
 	@POST
-	@Path("/register")
-	public String  register(User client) {
+	public String creatStation(Station station)
+	{
 		try {
-		  
-		  entityManager.persist(client);
-		  return "Client Added Successfuly : "+client.getusername();
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			return e.getMessage();
-		}
+			  
+			  entityManager.persist(station);;
+			  return "Station Added Successfuly : "+station.getName();
+			}
+			catch (Exception e) {
+				// TODO: handle exception
+				throw new WebApplicationException(Response
+					      .status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR)
+					      .type(MediaType.TEXT_PLAIN)
+					      .entity(e.getMessage())
+					      .build());
+			}
 	}
-	
 	@GET
-	@Path("/getUsers")
-	public List<User> getUsers(){
-		Query query=entityManager.createQuery("SELECT u from User u ");
-		 List<User> persons = query.getResultList();
-		 return persons;
+	public List<Station>getStation(){
+		Query query=entityManager.createQuery("SELECT s from Station s ");
+		 List<Station> stations = query.getResultList();
+		 return stations;
 	}
 	
-	@POST
-	@Path("/login")
-	public String  login(User client) {
-  
-		try {
-		  String select = "SELECT u FROM User u WHERE u.username=:userName and u.password=:passWord";
-
-		  Query query = entityManager.createQuery(select);
-		  query.setParameter("userName", client.getusername());
-		  query.setParameter("passWord", client.getPassword());
-		  User person = (User) query.getSingleResult();
-		  return  "ok";
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			throw new WebApplicationException(Response
-				      .status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
-				      .type(MediaType.TEXT_PLAIN)
-				      .entity("Sorry Username or Password are not right")
-				      .build());
-		}
-	}
 	
-
+	
+	
 
 }
+
