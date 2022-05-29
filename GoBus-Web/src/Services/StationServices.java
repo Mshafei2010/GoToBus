@@ -44,11 +44,22 @@ public class StationServices {
 			}
 	}
 	@GET
-	public List<Station>getStation(){
-		Query query=entityManager.createQuery("SELECT s from Station s ");
-		 List<Station> stations = query.getResultList();
-		 return stations;
+	@Path("/{Id}")
+	public Station getStation(@PathParam("Id") int Id){
+		try {
+			Station station = entityManager.find(Station.class, Id);
+			return station;
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+				      .status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR)
+				      .type(MediaType.TEXT_PLAIN)
+				      .entity(e.getMessage())
+				      .build());
+			
+		}
+		
 	}
+	
 	
 	
 	
