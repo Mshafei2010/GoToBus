@@ -78,10 +78,6 @@ public class UserServices {
 		}
 	}
 	
-	@GET
-	@Path("/get")
-	public String get(){
-		 return "Helooo";
-	}
+
 
 }
