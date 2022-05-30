@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Stateless
 @Entity
 @Table(name="USER")
-public class User {
+public class User implements Serializable{
 
 	   
 	@Id
