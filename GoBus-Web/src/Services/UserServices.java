@@ -2,6 +2,7 @@ package Services;
 
 import java.util.List;
 
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,43 +16,58 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import EJBs.Station;
+import EJBs.User;
 
 @Stateless
-@Path("/station")
+@Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class StationServices {
+public class UserServices {
+	
 	@PersistenceContext(unitName="GoBusWEB")
 	 private EntityManager entityManager;
+
+	
 	
 	@POST
-	public String creatStation(Station station)
-	{
+	@Path("/register")
+	public String  register(User client) {
 		try {
-			  
-			  entityManager.persist(station);;
-			  return "Station Added Successfuly : "+station.getName();
-			}
-			catch (Exception e) {
-				// TODO: handle exception
-				throw new WebApplicationException(Response
-					      .status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR)
-					      .type(MediaType.TEXT_PLAIN)
-					      .entity(e.getMessage())
-					      .build());
-			}
-	}
-	@GET
-	public List<Station>getStation(){
-		Query query=entityManager.createQuery("SELECT s from Station s ");
-		 List<Station> stations = query.getResultList();
-		 return stations;
+		  
+		  entityManager.persist(client);
+		  return "Client Added Successfuly : "+client.getusername();
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			return e.getMessage();
+		}
 	}
 	
+	@POST
+	@Path("/login")
+	public String  login(User client) {
+  
+		try {
+		  String select = "SELECT u FROM User u WHERE u.username=:userName and u.password=:passWord";
+
+		  Query query = entityManager.createQuery(select);
+		  query.setParameter("userName", client.getusername());
+		  query.setParameter("passWord", client.getPassword());
+		  User person = (User) query.getSingleResult();
+		  return  "ok";
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			throw new WebApplicationException(Response
+				      .status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+				      .type(MediaType.TEXT_PLAIN)
+				      .entity("Sorry Username or Password are not right")
+				      .build());
+		}
+	}
 	
-	
-	
+
+
 
 }
 

@@ -1,7 +1,6 @@
 package EJBs;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -13,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Stateless
 @LocalBean
@@ -34,19 +33,24 @@ public class Trip implements Serializable{
 	@JoinColumn(name="to_station_fk")
 	Station to_station_fk;
 	
+	@NotNull
 	@Column(name="from_station")
 	String from_station;
 	
-	
+	@NotNull
 	@Column(name="to_station")
 	String to_station;
 	
+	@NotNull
 	@Column(name="departure_time")
 	String departure_time;
 	
+	@NotNull
 	@Column(name="arrival_time")
 	String arrival_time;
 	
+	@NotNull
+	@Min(0)
 	@Column(name="available_seats")
 	int available_seats;
 	
