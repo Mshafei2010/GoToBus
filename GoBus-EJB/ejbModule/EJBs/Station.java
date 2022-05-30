@@ -1,15 +1,18 @@
 package EJBs;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.Generated;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
@@ -35,6 +38,13 @@ public class Station implements Serializable{
 	@DecimalMax("90.0")
 	@Column(name="latitude")
 	double latitude;
+
+	@OneToMany(mappedBy = "from_station_fk",fetch = FetchType.LAZY)
+	List<Trip>fromTrips;
+	
+	@OneToMany(mappedBy = "to_station_fk",fetch = FetchType.LAZY)
+	List<Trip>toTrips;
+
 	public String getName() {
 		return name;
 	}
