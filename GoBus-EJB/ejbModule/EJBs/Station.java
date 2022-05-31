@@ -25,10 +25,8 @@ public class Station implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int Id;
-	@NotNull
 	@Column(name="name")
 	String name;
 	@NotNull
@@ -38,24 +36,12 @@ public class Station implements Serializable{
 	@DecimalMax("90.0")
 	@Column(name="latitude")
 	double latitude;
-
-	@OneToMany(mappedBy = "from_station_fk",fetch = FetchType.LAZY)
-	List<Trip>fromTrips;
 	
-	@OneToMany(mappedBy = "to_station_fk",fetch = FetchType.LAZY)
-	List<Trip>toTrips;
-
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public int getId() {
-		return Id;
-	}
-	public void setId(int id) {
-		Id = id;
 	}
 	public double getLongitude() {
 		return longitude;
@@ -73,3 +59,4 @@ public class Station implements Serializable{
 	
 
 }
+
