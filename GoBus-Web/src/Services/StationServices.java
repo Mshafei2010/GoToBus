@@ -10,13 +10,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import EJBs.Station;
-import EJBs.User;
 
 @Stateless
 @Path("/station")
@@ -45,7 +45,7 @@ public class StationServices {
 	}
 	@GET
 	@Path("/{Id}")
-	public Station getStation(@PathParam("Id") int Id){
+	public Station getStation(@PathParam("Id") String Id){
 		try {
 			Station station = entityManager.find(Station.class, Id);
 			return station;
@@ -63,6 +63,6 @@ public class StationServices {
 	
 	
 	
-	
 
 }
+

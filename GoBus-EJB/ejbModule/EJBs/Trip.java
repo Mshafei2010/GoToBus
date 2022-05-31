@@ -12,8 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.jboss.resteasy.annotations.StringParameterUnmarshallerBinder;
 
 @Stateless
 @LocalBean
@@ -21,28 +24,21 @@ import javax.validation.constraints.NotNull;
 @Table(name="Trip")
 public class Trip implements Serializable{
 	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	int id;
-	@ManyToOne
-	@JoinColumn(name="from_station_fk")
-	Station from_station_fk;
 	
-	@ManyToOne
-	@JoinColumn(name="to_station_fk")
-	Station to_station_fk;
-	
-	@NotNull
 	@Column(name="from_station")
 	String from_station;
 	
-	@NotNull
 	@Column(name="to_station")
 	String to_station;
 	
 	@NotNull
 	@Column(name="departure_time")
+	
 	String departure_time;
 	
 	@NotNull
@@ -54,6 +50,11 @@ public class Trip implements Serializable{
 	@Column(name="available_seats")
 	int available_seats;
 	
+	@Transient
+	String from_date;
+	@Transient
+	String to_date;
+	
 	
 	/*
 	 *
@@ -61,6 +62,27 @@ public class Trip implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 
+	public String getFrom_date() {
+		return from_date;
+	}
+
+
+
+	public void setFrom_date(String from_date) {
+		this.from_date = from_date;
+	}
+
+
+
+	public String getTo_date() {
+		return to_date;
+	}
+
+
+
+	public void setTo_date(String to_date) {
+		this.to_date = to_date;
+	}
 	
 	public int getId() {
 		return id;
@@ -74,27 +96,6 @@ public class Trip implements Serializable{
 
 
 
-	public Station getFrom_station_fk() {
-		return from_station_fk;
-	}
-
-
-
-	public void setFrom_station_fk(Station from_station_fk) {
-		this.from_station_fk = from_station_fk;
-	}
-
-
-
-	public Station getTo_station_fk() {
-		return to_station_fk;
-	}
-
-
-
-	public void setTo_station_fk(Station to_station_fk) {
-		this.to_station_fk = to_station_fk;
-	}
 
 
 
@@ -119,9 +120,6 @@ public class Trip implements Serializable{
 	public void setTo_station(String to_station) {
 		this.to_station = to_station;
 	}
-
-
-
 
 
 
