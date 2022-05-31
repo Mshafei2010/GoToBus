@@ -1,11 +1,13 @@
 package EJBs;
 
+
 import java.io.Serializable;
 import java.lang.String;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -23,12 +25,16 @@ public class User implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	int id;
+	@NotNull
 	@Column (name="username")
 	String username;
+	@NotNull
 	@Column (name="password")
 	String password;
+	
 	@Column (name="full_name")
 	String full_name;
+	
 	@Column (name="role")
 	String role;
 	private static final long serialVersionUID = 1L;
@@ -75,3 +81,4 @@ public class User implements Serializable{
 	}
    
 }
+
