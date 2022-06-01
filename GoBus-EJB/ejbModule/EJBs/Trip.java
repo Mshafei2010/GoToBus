@@ -1,22 +1,24 @@
 package EJBs;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import org.jboss.resteasy.annotations.StringParameterUnmarshallerBinder;
 
 @Stateless
 @LocalBean
@@ -25,16 +27,25 @@ import org.jboss.resteasy.annotations.StringParameterUnmarshallerBinder;
 public class Trip implements Serializable{
 	
 
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3284220924369083342L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	int id;
 	
-	@Column(name="from_station")
-	String from_station;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="from_station_fk")
+	Station from_station_fk;
 	
-	@Column(name="to_station")
-	String to_station;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="to_station_fk")
+	Station to_station_fk;
 	
 	@NotNull
 	@Column(name="departure_time")
@@ -55,11 +66,55 @@ public class Trip implements Serializable{
 	@Transient
 	String to_date;
 	
+	String from_station;
 	
+	String to_station;
+
+
+	
+	@ManyToMany(mappedBy = "trips",fetch = FetchType.EAGER)
+	List<User>users=new ArrayList<User>();
+	
+	
+	
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+
+
 	/*
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
+	public Station getFrom_station_fk() {
+		return from_station_fk;
+	}
+
+
+
+	public void setFrom_station_fk(Station from_station_fk) {
+		this.from_station_fk = from_station_fk;
+	}
+
+
+
+	public Station getTo_station_fk() {
+		return to_station_fk;
+	}
+
+
+
+	public void setTo_station_fk(Station to_station_fk) {
+		this.to_station_fk = to_station_fk;
+	}
+
 
 
 	public String getFrom_date() {
@@ -83,7 +138,10 @@ public class Trip implements Serializable{
 	public void setTo_date(String to_date) {
 		this.to_date = to_date;
 	}
-	
+
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -93,10 +151,6 @@ public class Trip implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-
-
 
 
 	public String getFrom_station() {
