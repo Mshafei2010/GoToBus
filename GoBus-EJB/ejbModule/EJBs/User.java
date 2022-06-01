@@ -49,7 +49,8 @@ public class User implements Serializable{
 	@Column (name="role")
 	String role;
 	
-	
+
+
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -57,21 +58,21 @@ public class User implements Serializable{
 			joinColumns=@JoinColumn(name="user_id"),
 			inverseJoinColumns=@JoinColumn(name="trip_id")
 			)
-	List<Trip>trips=new ArrayList<Trip>();
+	List<Trip>trips;
 	
+
 	
-	public List<Trip> getTrips() {
+	public List<Trip>UserTrips(){
 		return trips;
 	}
 
-	public void setTrips(List<Trip> trips) {
-		this.trips = trips;
+	public void addtrip(Trip trip) {
+		trips.add(trip);
 	}
-
-	
 
 	public User() {
 		super();
+		trips=new ArrayList<Trip>();
 	}
 	public int getId() {
 		return id;

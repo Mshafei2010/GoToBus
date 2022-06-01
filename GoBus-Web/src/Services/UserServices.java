@@ -56,7 +56,6 @@ public class UserServices {
 		try {
 			ut.begin();
 		  String select = "SELECT u FROM User u WHERE u.username=:userName and u.password=:passWord";
-
 		  Query query = entityManager.createQuery(select);
 		  query.setParameter("userName", client.getusername());
 		  query.setParameter("passWord", client.getPassword());

@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
@@ -39,11 +40,11 @@ public class Trip implements Serializable{
 	@Column(name="id")
 	int id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="from_station_fk")
 	Station from_station_fk;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="to_station_fk")
 	Station to_station_fk;
 	
@@ -61,52 +62,52 @@ public class Trip implements Serializable{
 	@Column(name="available_seats")
 	int available_seats;
 	
-	@Transient
-	String from_date;
-	@Transient
-	String to_date;
 	
 	String from_station;
 	
 	String to_station;
+	
+
+
+	@Transient
+	String from_date;
+	@Transient
+	String to_date;
 
 
 	
 	@ManyToMany(mappedBy = "trips",fetch = FetchType.EAGER)
-	List<User>users=new ArrayList<User>();
+	List<User>users;
+	
+	public 	Trip() {
+		users=new ArrayList<User>();
+	}
 	
 	
-	
-
-	public List<User> getUsers() {
-		return users;
+	public boolean adduser(User user) {
+		if(available_seats>0) {
+			users.add(user);
+			available_seats--;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
 
 
 
 	/*
 	 *
 	 */
-	public Station getFrom_station_fk() {
-		return from_station_fk;
-	}
+
 
 
 
 	public void setFrom_station_fk(Station from_station_fk) {
 		this.from_station_fk = from_station_fk;
-	}
-
-
-
-	public Station getTo_station_fk() {
-		return to_station_fk;
 	}
 
 

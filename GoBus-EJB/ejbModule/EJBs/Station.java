@@ -1,6 +1,7 @@
 package EJBs;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class Station implements Serializable{
 	/**
 	 * 
 	 */
+	
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -38,12 +41,18 @@ public class Station implements Serializable{
 	@Column(name="latitude")
 	double latitude;
 	
-	@OneToMany(mappedBy = "to_station_fk",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "to_station_fk",fetch = FetchType.EAGER)
 	private Set<Trip>to_trips;
 	
 
-	@OneToMany(mappedBy = "from_station_fk",fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "from_station_fk",fetch = FetchType.EAGER)
 	private Set<Trip>from_trips;
+	
+	
+	public Station() {
+		to_trips=new HashSet<Trip>();
+		from_trips=new HashSet<Trip>();
+	}
 	
 	
 	public String getName() {
