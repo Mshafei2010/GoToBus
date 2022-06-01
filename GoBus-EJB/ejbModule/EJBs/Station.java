@@ -2,6 +2,7 @@ package EJBs;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Generated;
 import javax.ejb.LocalBean;
@@ -36,6 +37,14 @@ public class Station implements Serializable{
 	@DecimalMax("90.0")
 	@Column(name="latitude")
 	double latitude;
+	
+	@OneToMany(mappedBy = "to_station_fk",fetch = FetchType.LAZY)
+	private Set<Trip>to_trips;
+	
+
+	@OneToMany(mappedBy = "from_station_fk",fetch = FetchType.LAZY)
+	private Set<Trip>from_trips;
+	
 	
 	public String getName() {
 		return name;
