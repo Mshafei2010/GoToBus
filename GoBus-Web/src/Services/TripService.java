@@ -10,6 +10,7 @@ import javax.transaction.UserTransaction;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import EJBs.Station;
 import EJBs.Trip;
+import EJBs.User;
 
 
 @RequestScoped
@@ -32,19 +34,28 @@ public class TripService {
 
 	
 	@POST
-	public String createTrip(final Trip trip) throws IllegalStateException, SecurityException, SystemException {
-
+	@Path("/{user_id}")
+	public String createTrip(@PathParam("user_id")int user_id,final Trip trip) throws IllegalStateException, SecurityException, SystemException {
 		try {
 			   ut.begin();
-			    Station station=entityManager.find(Station.class,trip.getTo_station());
-				trip.setTo_station_fk(station);
+			   User user=entityManager.find(User.class, user_id);
+			   if(user.getRole().equals("Admin")) {//to check on the role of user 
+				   //search for the station if exists 
+				   Station station=entityManager.find(Station.class,trip.getTo_station());
+				   trip.setTo_station_fk(station);
 				
-				Station station2=entityManager.find(Station.class,trip.getFrom_station());
-				trip.setFrom_station_fk(station2);
-			    entityManager.persist(trip);
+				   Station station2=entityManager.find(Station.class,trip.getFrom_station());
+				   trip.setFrom_station_fk(station2);
+				   //persist the trip
+				   entityManager.persist(trip);
+				   ut.commit();
+				   return "Trip Created Successfully";
+				  }
+			   else {
+				ut.commit();
+				return "You Are Not Authorized To Use This Service";
+			}
 			    
-			   ut.commit();
-			  return "Trip Created Successfully";
 		}catch (Exception e) {
 			 ut.rollback();
 			throw new WebApplicationException(Response
@@ -54,6 +65,7 @@ public class TripService {
 				      .build());
 		}
 	}
+
 	
 }
 
