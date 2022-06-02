@@ -46,7 +46,7 @@ public class UserServices {
 		  ut.begin();
 		  entityManager.persist(client);
 		  ut.commit();
-		  return "Client Added Successfuly : "+client.getusername();
+		  return "Client Added Successfuly--> You User Name: "+client.getusername()+" -- Your ID :"+client.getId() ;
 		}
 		catch (Exception e) {
 			// TODO: handle exception
@@ -70,8 +70,9 @@ public class UserServices {
 		  return  "SuccessFully Logged In ";
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			// rollback the transaction
 			ut.rollback();
+			//this throw to return 400 bad request as required if credential are not exist 
 			throw new WebApplicationException(Response
 				      .status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
 				      .type(MediaType.TEXT_PLAIN)
@@ -98,7 +99,7 @@ public class UserServices {
 			return trips;
 		} catch (Exception e) {
 			ut.rollback();
-			// TODO Auto-generated catch block
+			// to return 500 Internal Server Error Response as required
 			throw new WebApplicationException(Response
 				      .status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR)
 				      .type(MediaType.TEXT_PLAIN)
@@ -113,28 +114,29 @@ public class UserServices {
 	@Path("/booktrip")
 	public String bookTrip(UserXTrip usertrip) throws IllegalStateException, SecurityException, SystemException {
 		try {
-			Calendar calendar = Calendar.getInstance();
+			Calendar calendar = Calendar.getInstance();//to get the current time and date
+			
 			ut.begin();
-			User user= entityManager.find(User.class, usertrip.getUser_id());
-			Trip trip=entityManager.find(Trip.class, usertrip.getTrip_id());
-			Notification notific=new Notification();
-			notific.setUser(user);
-			//entityManager.persist(usertrip);
-			if(trip.adduser(user)) {
+			User user= entityManager.find(User.class, usertrip.getUser_id());//searching for user by id
+			Trip trip=entityManager.find(Trip.class, usertrip.getTrip_id());//searching fot trip by id
+			
+			Notification notific=new Notification();//notification to be added to the user
+			notific.setUser(user);//seting the user for notification
+			if(trip.adduser(user)) {//if the number of seats is more than zero will add user and return true 
 				
 				user.addtrip(trip);
 				
 				notific.setMessage("You have booked trip from "+trip.getFrom_station()+" to "+trip.getTo_station()+" successfully" );
 				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 				notific.setNotification_datetime(formatter.format(calendar.getTime()));
-				entityManager.persist(notific);
+				entityManager.persist(notific);//persisting the notitification in db
 				
-				entityManager.merge(trip);
-				entityManager.merge(user);
+				entityManager.merge(trip);//updating the trip in db
+				entityManager.merge(user);//updating the user in db
 				
 				ut.commit();
 			}
-			else {
+			else {//if there is no seat available 
 				notific.setMessage("Sorry, Trip  "+trip.getFrom_station()+" to "+trip.getTo_station()+" have no available seats" );
 				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 				notific.setNotification_datetime(formatter.format(calendar.getTime()));
@@ -146,9 +148,10 @@ public class UserServices {
 			return "trip booking In Progress check your Notififcations";
 		} catch (Exception e) {
 			ut.rollback();
+			//to return the 500 Internal Server error if error happens or trip or user not found
 			throw new WebApplicationException(Response
 				      .status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR)
-				      .type(MediaType.TEXT_PLAIN)
+				      .type("User Or Trip Not Found")
 				      .entity(e.getMessage())
 				      .build());
 		}
@@ -160,8 +163,8 @@ public class UserServices {
 	public List<Trip> viewTrip(@PathParam("user_id") int user_id) throws IllegalStateException, SecurityException, SystemException {
 		try {
 			ut.begin();
-			User user= entityManager.find(User.class,user_id );
-			List<Trip>trips= user.UserTrips();
+			User user= entityManager.find(User.class,user_id );//get the specified user by id
+			List<Trip>trips= user.UserTrips();//getting the user trips to return it
 			ut.commit();
 			return trips;
 			
@@ -182,8 +185,8 @@ public class UserServices {
 	public List<Notification>showUserNotifications(@PathParam("user_id")int user_id) throws IllegalStateException, SecurityException, SystemException{
 		try {
 			ut.begin();
-			User user= entityManager.find(User.class,user_id );
-			List<Notification>notifications= user.UserNotifications();
+			User user= entityManager.find(User.class,user_id );//get the specified user by id
+			List<Notification>notifications= user.UserNotifications();//getting the user trips to return it
 			ut.commit();
 			return notifications;
 			

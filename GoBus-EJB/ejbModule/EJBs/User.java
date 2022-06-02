@@ -102,15 +102,7 @@ public class User implements Serializable{
 		this.username = username;
 	}
 
-	
 
-	public int getID() {
-		return this.id;
-	}
-
-	public void setID(int id) {
-		this.id = id;
-	}   
 	public String getusername() {
 		return this.username;
 	}
