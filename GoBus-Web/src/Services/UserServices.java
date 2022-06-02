@@ -61,7 +61,7 @@ public class UserServices {
 		  query.setParameter("passWord", client.getPassword());
 		  User person = (User) query.getSingleResult();
 		  ut.commit();
-		  return  "ok";
+		  return  "SuccessFully Logged In ";
 		}
 		catch (Exception e) {
 			// TODO: handle exception
