@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import EJBs.Station;
+import EJBs.User;
 
 @RequestScoped
 @Path("/station")
@@ -30,13 +31,21 @@ public class StationServices {
 
 	
 	@POST
-	public String creatStation(Station station) throws IllegalStateException, SecurityException, SystemException
+	@Path("/{user_id}")
+	public String creatStation(@PathParam("user_id")int user_id,Station station) throws IllegalStateException, SecurityException, SystemException
 	{
 		try {
 			  ut.begin();
+			  User user=entityManager.find(User.class, user_id);
+			  if(user.getRole().equals("Admin")) {
 			  entityManager.persist(station);
 			  ut.commit();
 			  return "Station Added Successfuly : "+station.getName();
+			  }
+			  else {
+				  ut.commit();
+				  return "You Are Not Authorized to Use This Service";
+			  }
 			}
 			catch (Exception e) {
 				// TODO: handle exception
