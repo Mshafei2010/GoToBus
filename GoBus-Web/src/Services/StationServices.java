@@ -1,13 +1,9 @@
 package Services;
 
-import java.util.List;
-
 import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.Consumes;

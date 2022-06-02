@@ -4,10 +4,7 @@ package EJBs;
 import java.io.Serializable;
 import java.lang.String;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -19,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * Entity implementation class for Entity: User
  *
  */
-import EJBs.Trip;
+
 
 @Stateless
 @LocalBean
@@ -60,7 +57,26 @@ public class User implements Serializable{
 			)
 	List<Trip>trips;
 	
+	@OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+	List<Notification>notifications;
+	
 
+
+	public List<Notification>UserNotifications(){
+		return notifications;
+	}
+
+	public void addNotification(Notification notific) {
+		notifications.add(notific);
+	}
+	
+	
+
+	public User() {
+		super();
+		trips=new ArrayList<Trip>();
+		notifications=new ArrayList<Notification>();
+	}
 	
 	public List<Trip>UserTrips(){
 		return trips;
@@ -68,11 +84,6 @@ public class User implements Serializable{
 
 	public void addtrip(Trip trip) {
 		trips.add(trip);
-	}
-
-	public User() {
-		super();
-		trips=new ArrayList<Trip>();
 	}
 	public int getId() {
 		return id;

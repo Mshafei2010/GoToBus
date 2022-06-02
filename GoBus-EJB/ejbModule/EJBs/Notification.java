@@ -1,8 +1,6 @@
 package EJBs;
 
 import java.io.Serializable;
-import java.util.Date;
-
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.Column;
@@ -10,9 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 @Stateless
 @LocalBean
@@ -31,11 +29,15 @@ public class Notification implements Serializable{
 	
 	@NotNull
 	@Column(name="notification_datetime")
-	@Temporal(TemporalType.DATE)
-	Date notification_datetime;
+	String notification_datetime;
 	
-	public int getId() {
-		return id;
+	@ManyToOne
+	@JoinColumn(name="user")
+	User user;
+	
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setId(int id) {
@@ -50,13 +52,14 @@ public class Notification implements Serializable{
 		this.message = message;
 	}
 
-	public Date getNotification_datetime() {
+	public String getNotification_datetime() {
 		return notification_datetime;
 	}
 
-	public void setNotification_datetime(Date notification_datetime) {
+	public void setNotification_datetime(String notification_datetime) {
 		this.notification_datetime = notification_datetime;
 	}
 
 	
 }
+
